@@ -1,0 +1,26 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth
+/reports/
+/allure-report
+/allure-results
+
+
+# env files(confidentials) :
+
+config/.env.*
+
+
+#OS files
+.DS_store
+
+reporting-labs.history.json
+
+
+#build 
+dist/
