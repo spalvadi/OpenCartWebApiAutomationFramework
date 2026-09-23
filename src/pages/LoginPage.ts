@@ -46,7 +46,7 @@ async isForgottenPwdLinkExist():Promise<Boolean>{
 
 async doLogin(username:string,password:string):Promise<void>
 {
-console.log(`user creds: ${username} - ${password}`);
+console.log(`appp user creds: ${username} - ${password}`);
 await this.emailId.fill(username);
 await this.password.fill(password);
 await this.loginBtn.click();
