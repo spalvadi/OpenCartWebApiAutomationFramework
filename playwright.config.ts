@@ -1,16 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
-import  dotenv from 'dotenv';
+import reportingLabs from './reporting-labs.config';
 
+import dotenv from 'dotenv';
 
 //npm install dotenv
-
-//ENV =qa npm playwright test 
-
-
-const ENV=process.env.ENV ||"qa";
-console.log(ENV);
-dotenv.config({path: `config/.env.${ENV}`});
-
+//ENV=qa npx playwright test
+const ENV = process.env.ENV || "qa";
+console.log('Running tests on Environment: ', ENV);
+dotenv.config({ path: `config/.env.${ENV}` });
 
 export default defineConfig({
   testDir: './tests',
@@ -21,14 +18,37 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
+
+  reporter: process.env.CI
+    ? [
+      ['list'],
+      ['html', { outputFolder: "reports/html-report", open: "never" }],
+      ["allure-playwright", {
+        outputFolder: "allure-results",
+        suiteTitle: true,
+      }],
+      ['reporting-labs', reportingLabs]
+    ]
+    :
+    [
+      ['list'],
+      ['html', { outputFolder: "reports/html-report", open: "never" }],
+      ["allure-playwright", {
+        outputFolder: "allure-results",
+        suiteTitle: true,
+      }],
+      ['reporting-labs', reportingLabs]
+    ],
+
   use: {
-    baseURL:process.env.BASE_URL,
-    headless:false,
+    baseURL: process.env.BASE_URL,
+    headless: !process.env.CI ? false : true,
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure'
   },
 
   /* Configure projects for major browsers */
@@ -38,15 +58,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-  //   {
-  //     name: 'firefox',
-  //     use: { ...devices['Desktop Firefox'] },
-  //    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-  //  {
-  //      name: 'webkit',
-  //      use: { ...devices['Desktop Safari'] },
-  //  },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
@@ -69,10 +89,5 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+
 });
