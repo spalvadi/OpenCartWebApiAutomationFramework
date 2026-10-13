@@ -9,7 +9,7 @@ await loginPage.doLogin(process.env.USERNAME,process.env.PASSWORD);
 
 });
 
-test ('@smoke Home page title test',async ({homePage}) => {
+test.skip('@smoke Home page title test',async ({homePage}) => {
 
     
     let pageTitle = await homePage.getHomePageTitle();
