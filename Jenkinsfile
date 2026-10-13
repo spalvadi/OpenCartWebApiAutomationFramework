@@ -80,7 +80,7 @@ pipeline {
                 echo "  Installing Playwright Dependencies"
                 echo "========================================="
                 dir('qa-tests') {
-                    git url: 'https://github.com/naveenanimation20/OpenCartWebAPIAutomationFramework.git',
+                    git url: 'https://github.com/spalvadi/OpenCartWebApiAutomationFramework.git',
                         branch: 'main'
                     sh 'npm ci'
                     sh 'npx playwright install --with-deps chromium'
@@ -423,7 +423,7 @@ pipeline {
 
                 // Email Notification
                 emailext(
-                    to: 'naveenanimation20@gmail.com,training@naveenautomationlabs.com',
+                    to: 'palvadis@gmail.com,training@naveenautomationlabs.com',
                     subject: "🎭 CI/CD Pipeline — ${statusEmoji} ${buildStatus} — Build #${env.BUILD_NUMBER}",
                     mimeType: 'text/html',
                     body: """
